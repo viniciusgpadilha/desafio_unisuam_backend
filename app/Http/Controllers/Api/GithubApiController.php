@@ -16,8 +16,10 @@ class GithubApiController extends Controller
         $user = $response->json();
 
         $response = Http::get("https://api.github.com/users/{$username}/following");
-        Log::info("GitHub API Following Request Username Following: " . $response->body());
+        Log::info("GitHub API Response Username Following: " . $response->body());
         $following = $response->json();
+
+        // dd($user);
 
         return response()->json([
             'user' => $user,
