@@ -2,28 +2,34 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Http;
+use App\Services\GitHubService;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Traits\Log;
 
-class GithubApiController extends Controller
+class GitHubApiController extends Controller
 {
-    public function getUserData($username)
+    protected $githubService;
+
+    use Log;
+
+    public function __construct(GitHubService $githubService) 
     {
-        $response = Http::get("https://api.github.com/users/{$username}");
-        Log::info("GitHub API Request Username: " . $response->body());
-        $user = $response->json();
+        $this->githubService = $githubService;
+    }
 
-        $response = Http::get("https://api.github.com/users/{$username}/following");
-        Log::info("GitHub API Response Username Following: " . $response->body());
-        $following = $response->json();
+    public function getUserAndFollowing($username)
+    {
+        $data = $this->githubService->getUserAndFollowing($username);
+        $followingLogin = array();
 
-        // dd($user);
+        foreach ($data['following'] as $following) {
+            array_push($followingLogin, $following['login']);
+        }
 
-        return response()->json([
-            'user' => $user,
-            'following' => $following
-        ]);
+        $this->Log($data['user']['login'], $followingLogin);
+
+        return response()->json($data);
     }
 }
