@@ -24,11 +24,13 @@ class GitHubApiController extends Controller
         $data = $this->githubService->getUserAndFollowing($username);
         $followingLogin = array();
 
-        foreach ($data['following'] as $following) {
-            array_push($followingLogin, $following['login']);
-        }
-
-        $this->Log($data['user']['login'], $followingLogin);
+        if (!isset($data['error'])) {
+            foreach ($data['following'] as $following) {
+                array_push($followingLogin, $following['login']);
+            }
+    
+            $this->Log($data['user']['login'], $followingLogin);  
+        } 
 
         return response()->json($data);
     }
