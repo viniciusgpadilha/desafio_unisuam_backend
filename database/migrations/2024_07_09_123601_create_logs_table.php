@@ -12,8 +12,8 @@ return new class extends Migration
     {
         Schema::create('logs', function (Blueprint $table) {
             $table->id();
-            $table->string('username');
-            $table->string('following', 10000);
+            $table->string('request');
+            $table->string('response', 10000);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->nullable();
         });

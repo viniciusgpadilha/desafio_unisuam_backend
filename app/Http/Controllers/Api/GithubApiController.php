@@ -30,7 +30,9 @@ class GitHubApiController extends Controller
             }
     
             $this->Log($data['user']['login'], $followingLogin);  
-        } 
+        } else {
+            $this->Log($username, $data['error']);  
+        }
 
         return response()->json($data);
     }

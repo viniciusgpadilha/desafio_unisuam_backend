@@ -5,12 +5,12 @@ namespace App\Http\Traits;
 use DB;
 
 trait Log {
-    public function Log($username,$following) 
+    public function Log($request,$response) 
         { 
             DB::table('logs')->insert([
                 [ 
-                    'username' => $username,
-                    'following' => json_encode($following, JSON_UNESCAPED_UNICODE),
+                    'request' => $request,
+                    'response' => json_encode($response, JSON_UNESCAPED_UNICODE),
                 ]
             ]);
         }
